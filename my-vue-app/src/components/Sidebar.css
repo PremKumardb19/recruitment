@@ -1,0 +1,349 @@
+/* Import font */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --sidebar-width: 260px;
+  --sidebar-collapsed-width: 72px;
+  --sidebar-bg: #1e1e2d;
+  --sidebar-hover: #2a2a3c;
+  --sidebar-active: #009ef7;
+  --sidebar-text: #9899ac;
+  --sidebar-active-text: #ffffff;
+  --sidebar-header-bg: #1a1a27;
+  --transition-speed: 0.3s;
+  --gradient-start: #6d6af0;
+  --gradient-end: #009ef7;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* Sidebar Container */
+.sidebar {
+  position: fixed;
+  left: 0;
+  top: 0;
+  height: 100vh;
+  width: var(--sidebar-width);
+  background-color: var(--sidebar-bg);
+  color: var(--sidebar-text);
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+  transition: all var(--transition-speed) cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+  opacity: 0;
+  transform: translateX(-20px);
+  z-index: 100;
+}
+
+.sidebar-mounted {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.sidebar.collapsed {
+  width: var(--sidebar-collapsed-width);
+}
+
+/* Sidebar Header */
+.sidebar-header {
+  background-color: var(--sidebar-header-bg);
+  padding: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 70px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.sidebar-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: white;
+  white-space: nowrap;
+  background: linear-gradient(to right, var(--gradient-start), var(--gradient-end));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  opacity: 0;
+  animation: fadeIn 0.5s ease forwards;
+  animation-delay: 0.3s;
+}
+
+.collapsed .sidebar-title {
+  opacity: 0;
+  width: 0;
+  overflow: hidden;
+}
+
+.toggle-btn {
+  background: transparent;
+  border: none;
+  color: var(--sidebar-text);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  transition: all 0.2s;
+  /* Make toggle button animation-friendly */
+  transform: rotate(0deg);
+  transition: transform 0.3s ease, background-color 0.2s;
+}
+
+.toggle-btn:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+/* Animate toggle button rotation */
+.collapsed .toggle-btn {
+  transform: rotate(180deg);
+}
+
+.sidebar-content {
+  padding: 1rem;
+  flex-grow: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+/* Navigation Links */
+.nav-link {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  color: var(--sidebar-text);
+  text-decoration: none;
+  border-radius: 8px;
+  position: relative;
+  overflow: hidden;
+  transition: all var(--transition-speed);
+  opacity: 0;
+  transform: translateY(10px);
+  animation: slideIn 0.5s ease forwards;
+}
+
+.nav-link:hover {
+  color: white;
+  background-color: var(--sidebar-hover);
+}
+
+.nav-link.active {
+  color: var(--sidebar-active-text);
+  background-color: rgba(0, 158, 247, 0.1);
+}
+
+.link-icon {
+  min-width: 20px;
+  margin-right: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.link-text {
+  white-space: nowrap;
+  opacity: 1;
+  transition: opacity var(--transition-speed), width var(--transition-speed);
+}
+
+.collapsed .link-text {
+  opacity: 0;
+  width: 0;
+  overflow: hidden;
+}
+
+.active-indicator {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 4px;
+  height: 100%;
+  background: linear-gradient(to bottom, var(--gradient-start), var(--gradient-end));
+  border-radius: 0 3px 3px 0;
+  animation: slideRight 0.3s ease;
+}
+
+/* Logout Button */
+.logout-btn {
+  margin-top: auto;
+  margin-bottom: 1rem;
+  margin-left: 1rem;
+  margin-right: 1rem;
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  background-color: rgba(220, 38, 38, 0.1);
+  color: #f87171;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all var(--transition-speed);
+  opacity: 0;
+  transform: translateY(10px);
+  animation: slideIn 0.5s ease forwards;
+}
+
+.logout-btn:hover {
+  background-color: rgba(220, 38, 38, 0.2);
+  color: #ef4444;
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(220, 38, 38, 0.2);
+}
+
+.logout-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 5px rgba(220, 38, 38, 0.2);
+}
+
+.logout-btn .link-icon {
+  min-width: 20px;
+  margin-right: 12px;
+}
+
+.collapsed .logout-btn {
+  padding: 0.75rem;
+  justify-content: center;
+}
+
+.collapsed .logout-btn .link-text {
+  opacity: 0;
+  width: 0;
+  overflow: hidden;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideRight {
+  from {
+    transform: translateX(-10px);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+/* Animated Background (Pulse effect) for active link */
+.nav-link.active::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 120%;
+  height: 120%;
+  background: radial-gradient(circle, rgba(0, 158, 247, 0.3) 0%, rgba(255, 255, 255, 0) 70%);
+  transform: translate(-50%, -50%) scale(0);
+  border-radius: 50%;
+  z-index: -1;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: translate(-50%, -50%) scale(0.8);
+    opacity: 0.8;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1.5);
+    opacity: 0;
+  }
+}
+
+/* Custom scrollbar */
+.sidebar-content::-webkit-scrollbar {
+  width: 5px;
+}
+
+.sidebar-content::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.sidebar-content::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+}
+
+.sidebar-content::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .sidebar {
+    width: var(--sidebar-collapsed-width);
+  }
+  
+  .sidebar.expanded {
+    width: var(--sidebar-width);
+  }
+  
+  .sidebar:not(.expanded) .link-text {
+    opacity: 0;
+    width: 0;
+    overflow: hidden;
+  }
+  
+  .sidebar:not(.expanded) .logout-btn {
+    padding: 0.75rem;
+    justify-content: center;
+  }
+}
+
+/* Tooltip for collapsed sidebar */
+.collapsed .nav-link::after,
+.collapsed .logout-btn::after {
+  content: attr(title);
+  position: absolute;
+  left: 70px;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: var(--sidebar-bg);
+  color: white;
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  white-space: nowrap;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+  z-index: 100;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+.collapsed .nav-link:hover::after,
+.collapsed .logout-btn:hover::after {
+  opacity: 1;
+}
+
+/* Add title attributes to links for tooltip */
+.nav-link[title]::after {
+  content: attr(title);
+}
